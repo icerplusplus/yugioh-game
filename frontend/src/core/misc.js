@@ -48,6 +48,7 @@ class Misc {
             }
             if (cards.includes(get_unique_id_from_ennvironment(current_cards[i]))) {
                 environment[side][ENVIRONMENT.GRAVEYARD].push(current_cards[i])
+
                 if (src === ENVIRONMENT.HAND) {
                     environment[side][src].splice(i, 1)
                     console.log("move_cards_to_graveyard_from hand: ", environment)
@@ -85,7 +86,5 @@ export const draw_card_from_deck = (environment, info) => {
     }
     return environment
 }
-
-
 
 export default new Misc()

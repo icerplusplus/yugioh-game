@@ -58,6 +58,7 @@ socket.on("opponent_summon", (data) => {
 
 socket.on("opponent_move_card_to_graveyard", (data) => {
     console.log("[socket] opponent_move_card_to_graveyard: ", data.data)
+
     const { cards, side, src } = data.data
     const environment = getCurrentEnvironment()
     Core.Misc.move_cards_to_graveyard(cards, side, src, environment)

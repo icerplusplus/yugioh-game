@@ -21,7 +21,6 @@ const serverSlice = createSlice({
         },
         getOpponentDeck: (state, action) => {
             const { info } = action.payload;
-
             return {
                 ...state,
                 opponent_deck: info.deck
