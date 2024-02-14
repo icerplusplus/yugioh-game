@@ -12,23 +12,24 @@ const battleMetaSlice = createSlice({
     reducers: {
       directAttackOrOthersAttack: (state, action) => {
         const { info } = action.payload;
-        // console.log(info)
         const battle_meta = {
             src_monster: info.src_monster,
             dst: info.dst,
             battle_step: BATTLE_STEP.START_STEP,
             side: SIDE.MINE
         }
+
+        console.log("battle_meta: ", battle_meta)
         emit_attack_start(battle_meta)
         return {
-            ...state,
-            battle_meta
+            battle_meta: battle_meta
         };
       },
       opponentAttackStart: (state, action) => {
         const { info } = action.payload;
+        console.log("action.payload: opponentAttackStart", action.payload)
+
         return{
-            ...state,
             battle_meta: {
                 src_monster: info.src_monster,
                 dst: info.dst,
@@ -38,12 +39,13 @@ const battleMetaSlice = createSlice({
         }
       },
       opponentAttackAck: (state, action) => {
-        const { info } = action.payload;
-        const { environment } = info;
+        const { environment } = action.payload;
+        
+        console.log("opponentAttackAck: ", environment)
         const { src_monster, dst, side } = state.battle_meta
 
         const { src_index, dst_index } = Core.Battle.get_battle_index(src_monster, dst, side, environment)
-       
+        console.log("opponentAttackAck: ", {src_index, dst_index})
         return {
             ...state,
             battle_meta: {
@@ -54,9 +56,8 @@ const battleMetaSlice = createSlice({
             }
         }
       },
-      endBattle: (state) => {
+      endBattle: (state, action) => {
         return {
-            ...state,
             battle_meta: undefined
         }
       },

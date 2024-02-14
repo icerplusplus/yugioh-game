@@ -13,7 +13,7 @@ const ENDPOINT = "http://127.0.0.1:4001";
 const socket = io(ENDPOINT);
 
 const getCurrentEnvironment = () => {
-    return useAppStore().getState().environment.environment
+    return store.getState().environment.environment
 }
 
 socket.on("connect", () => {
@@ -32,7 +32,7 @@ socket.on("matched", (data) => {
         opponent_id: socket.opponent,
         player_starts: data.player_starts
     }
-    store.dispatch(AllActionsInStore.Actions.Server.getOpponentId(info))
+    store.dispatch(AllActionsInStore.Actions.Server.getOpponentId({info}))
 })
 
 socket.on("receive_deck", (data) => {
@@ -40,11 +40,12 @@ socket.on("receive_deck", (data) => {
     const info = {
         deck: data.deck,
     }
-    store.dispatch(AllActionsInStore.Actions.Server.getOpponentDeck(info))
+    store.dispatch(AllActionsInStore.Actions.Server.getOpponentDeck({info}))
 })
 
 socket.on("opponent_summon", (data) => {
     const environment = getCurrentEnvironment()
+    console.log("opponent_summon: ", data)
     Core.Summon.summon(data.data, data.data.type, environment)
 })
 
@@ -56,6 +57,8 @@ socket.on("opponent_summon", (data) => {
 // })
 
 socket.on("opponent_move_card_to_graveyard", (data) => {
+    console.log("[socket] opponent_move_card_to_graveyard: ", data.data)
+
     const { cards, side, src } = data.data
     const environment = getCurrentEnvironment()
     Core.Misc.move_cards_to_graveyard(cards, side, src, environment)
@@ -63,18 +66,20 @@ socket.on("opponent_move_card_to_graveyard", (data) => {
 
 
 socket.on("opponent_change_phase", (data) => {
-    store.dispatch(AllActionsInStore.Actions.GameMeta.changePhase(data.data))
+    store.dispatch(AllActionsInStore.Actions.GameMeta.changePhase({info: data.data}))
 })
 
 socket.on("opponent_attack_start", (data) => {
-    store.dispatch(AllActionsInStore.Actions.BattleMeta.opponentAttackStart(data.data))
+    console.log("[SOCKET] opponent_attack_start: ", data)
+    store.dispatch(AllActionsInStore.Actions.BattleMeta.opponentAttackStart({info: data.data}))
 })
 
 socket.on("opponent_attack_ack", (data) => {
+    console.log("socket opponent_attack_ack: ", data)
     const info = {
         environment: getCurrentEnvironment()
     }
-    store.dispatch(AllActionsInStore.Actions.BattleMeta.opponentAttackAck(info))
+    store.dispatch(AllActionsInStore.Actions.BattleMeta.opponentAttackAck({...info}))
 })
 
 socket.on("opponent_card_activate", (data) => {
