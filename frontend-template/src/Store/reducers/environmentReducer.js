@@ -26,6 +26,7 @@ export default function(state = initialState, action) {
     } else if (action.type == DRAW_CARD) {
         const { info } = action.payload;
         const new_environment = Core.Misc.draw_card_from_deck(state.environment, info);
+        console.log("new_environment: ", new_environment)
         return {
             environment: {
                 ...new_environment

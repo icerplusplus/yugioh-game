@@ -2,7 +2,7 @@ import { TOOL_TYPE } from "@/utils/helper/constants"
 import { createSlice } from "@reduxjs/toolkit"
 
 const initialize_tools = () => {
-    const res = {}
+    let res = {}
     for (const tool_name of Object.keys(TOOL_TYPE)) {
         res[TOOL_TYPE[tool_name]] = {
             status: false,

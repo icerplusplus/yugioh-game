@@ -13,6 +13,7 @@ const summon = (info, type, environment) => {
     } else {
         info.card.current_pos = CARD_POS.SET;
     }
+    console.log("info, type, environment: ", {info, type, environment})
     let current_monsters = environment[info.side][ENVIRONMENT.MONSTER_FIELD];
     const summon_priorities = [2, 3, 1, 4, 0]
     for (let i = 0; i < summon_priorities.length; i++) {

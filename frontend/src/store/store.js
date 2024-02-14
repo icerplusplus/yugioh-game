@@ -8,13 +8,17 @@ import EnvironmentReducer from "@/store/slices/Environment";
 
 const store = configureStore({
   reducer: {
-    environments: EnvironmentReducer,
+    environment: EnvironmentReducer,
     battle: BattleMetaReducer,
     gameMeta: GameMetaReducer,
     mouse: MouseReducer,
     server: ServerReducer,
     tool: ToolReducer,
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck:false
+    }),
 })
 
 export default store
