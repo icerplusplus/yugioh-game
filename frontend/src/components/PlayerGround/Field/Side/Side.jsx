@@ -89,21 +89,15 @@ function Side(props) {
         }
     }
 
+    let side_style = undefined
+    const { cardBattleStyle } = state
+    const { side, environment, game_meta, battle_selection, battle_animation } = props
+    if (cardBattleStyle?.side === side) {
+        side_style = cardBattleStyle.side_style
+    }
+
     React.useEffect(() => {
         const { battle_animation, side, battle_selection } = props;
-        if (battle_animation.key) {
-            // perform animation
-            console.log("battle_animation: ", battle_animation)
-            setState(prev => ({
-                ...prev,
-                cardBattleStyle: {
-                    ...calculate_battle_style(battle_animation),
-                    side: battle_animation.side,
-                    type: ANIMATION_TYPE.ATTACK_ANIMATION
-                }
-            }))
-        }
-
         // when the attack animation has finished
         if (state?.cardBattleStyle?.style && state.cardBattleStyle.type === ANIMATION_TYPE.ATTACK_ANIMATION) {
             setTimeout(() => setState(prev => ({
@@ -155,12 +149,19 @@ function Side(props) {
 
     }, [props.battle_animation, props.side, props.battle_selection, props.environment]) // state.cardBattleStyle
 
-    let side_style = undefined
-    const { cardBattleStyle } = state
-    const { side, environment, game_meta, battle_selection, battle_animation } = props
-    if (cardBattleStyle?.side === side) {
-        side_style = cardBattleStyle.side_style
-    }
+    React.useEffect(() => {
+        if (props.battle_animation.key) {
+            // perform animation
+            setState(prev => ({
+                ...prev,
+                cardBattleStyle: {
+                    ...calculate_battle_style(props.battle_animation),
+                    side: props.battle_animation.side,
+                    type: ANIMATION_TYPE.ATTACK_ANIMATION
+                }
+            }))
+        }
+    }, [props.battle_animation])
 
     const initializeSide = React.useCallback(() => {
         
@@ -238,7 +239,7 @@ function Side(props) {
                 </div>
             );
         });
-    }, [environment, battle_animation, side, battle_selection, state, side_style, game_meta])
+    }, [environment, battle_animation, side, battle_selection, state, side_style])
 
 
     return <div style={side_style} className={"side_box_" + side}>{initializeSide()}</div>;
